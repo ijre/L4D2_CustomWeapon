@@ -32,7 +32,7 @@ public APLRes AskPluginLoad2(Handle h, bool late)
 }
 
 static Action cb(int client, int args) { return Plugin_Continue; }
-static Action doTest(int client, int args) { Primmy(GetPlayerWeaponSlot(client, 0)); return Plugin_Handled; }
+static stock Action doTest(int client, int args) { Primmy(GetPlayerWeaponSlot(client, 0)); return Plugin_Handled; }
 
 public void OnPluginStart()
 {
