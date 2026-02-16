@@ -1,0 +1,36 @@
+"Games"
+{
+  "left4dead2"
+  {
+    "Functions"
+    {
+      "PrimFire"
+      {
+        "offset"    "PrimaryFire"
+        "callconv"  "thiscall"
+        "return"    "void"
+        "this"      "entity"
+      }
+    }
+
+    "Offsets"
+    {
+      "SendWeaponAnim"
+      {
+        "windows" "251"
+      }
+      "Reload"
+      {
+        "windows" "281"
+      }
+      "PrimaryFire"
+      {
+        "windows" "282"
+      }
+      "BaseForceFire"
+      {
+        "windows" "285"
+      }
+    }
+  }
+}

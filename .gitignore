@@ -1,0 +1,4 @@
+*.code-workspace
+moveFiles.bat
+src/scripts/test
+src/itemFlags.txt
