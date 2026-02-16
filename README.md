@@ -9,5 +9,7 @@ Compiling requires [thelpers](https://github.com/voided/sourcemod-transitional-h
   - trying to reload while full causes viewmodel anim prediction errors until reload button is let go
 - TODO:
   - Accuracy stats are not implemented.
+  - Penetration and penetration stats are not implemented.
   - Special ammo (incendiary/explosive) is not implemented.
   - All client side impact effects (blood splatter on hitting player/infected, bullet impact + decal on hitting world/prop) are not implemented.
+  - Possibly more things not implemented that I haven't thought about.
