@@ -43,8 +43,8 @@ stock WepInfo_t LoadWeaponFile(const char[] fileName = "scripts\\weapon_csbase_g
 
   // defaults are pulled from reversed CTerrorWeaponInfo::Parse
   WepInfo_t ret;
-  ret.Damage    = wepFileKV.GetNum("Damage");
-  ret.Bullets   = wepFileKV.GetNum("Bullets");
+  ret.Damage    = wepFileKV.GetNum("Damage", 1); // the real default for this is 42, but i figure if this has gone wrong it should be obvious
+  ret.Bullets   = wepFileKV.GetNum("Bullets", 1);
   ret.Range     = wepFileKV.GetFloat("Range", 8192.0);
   ret.RangeGain = wepFileKV.GetFloat("GainRange");
   ret.RangeMod  = wepFileKV.GetFloat("RangeModifier", 0.98);
