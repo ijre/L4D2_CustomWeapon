@@ -4,7 +4,7 @@
 #include <sdktools>
 #define GAME_L4D2
 #include <thelpers>
-#include "C:/Users/Paige/source/repos/# shared notes source/PrintToChatAllLog.sp"
+// #include "C:/Users/Paige/source/repos/# shared notes source/PrintToChatAllLog.sp"
 
 #include "Helpers.sp"
 
