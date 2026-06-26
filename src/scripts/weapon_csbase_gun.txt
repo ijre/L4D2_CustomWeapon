@@ -99,7 +99,7 @@ WeaponData
       "volume"      "0.66"
       "pitch"       "100"
       "soundlevel"  "85"
-      "wave"        "player\survivor\voice\Manager\TakeSubMachineGun03.wav"
+      "wave"        ")weapons/rifle_ak47/gunfire/rifle_fire_1.wav"
     }
     "shoot_incendiary"	")weapons/rifle_ak47/gunfire/rifle_fire_1_incendiary.wav"
   }
