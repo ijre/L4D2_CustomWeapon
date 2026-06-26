@@ -5,6 +5,8 @@
 #define GAME_L4D2
 #include <thelpers>
 #tryinclude <PrintToChatAllLog.sp>
+#define DEFAULT_DEBUG 1
+#tryinclude <SetupDebugMacros.sp>
 
 #include "Helpers.sp"
 
