@@ -34,11 +34,11 @@ public APLRes AskPluginLoad2(Handle h, bool late)
 }
 
 static Action cb(int client, int args) { return Plugin_Continue; }
-static stock Action doTest(int client, int args)
-{
-  Primmy(GetPlayerWeaponSlot(client, 0));
-  return Plugin_Handled;
-}
+
+#if DEBUG
+  static Action Test_Print(int client, int args) { return Plugin_Handled; }
+  static Action Test_ForcePrimaryFire(int client, int args) { Primmy(GetPlayerWeaponSlot(client, 0)); return Plugin_Handled; }
+#endif
 
 public void OnPluginStart()
 {
@@ -65,9 +65,13 @@ public void OnPluginStart()
   OurInfo = LoadWeaponFile();
 
   RegConsoleCmd("give csbase_gun", cb);
-  // RegAdminCmd("sm_fuck_off", doTest, ADMFLAG_ROOT);
 
   HookEvent("weapon_fire", OnFire, EventHookMode_Pre);
+
+#if DEBUG
+  RegAdminCmd("sm_weptest", Test_Print, ADMFLAG_ROOT);
+  RegAdminCmd("sm_weptest_fire", Test_ForcePrimaryFire, ADMFLAG_ROOT);
+#endif
 
   if (LateLoad)
   {
@@ -142,6 +146,26 @@ static Action OnFire(Event event, const char[] name, bool dontBroadcast)
 {
   char weapon[128];
   event.GetString("weapon", weapon, sizeof(weapon));
+
+#if DEBUG
+    int client = GetClientOfUserId(event.GetInt("userid"));
+    CBaseCombatWeapon wep = view_as<CBaseCombatWeapon>(VA_Plr(client).ActiveWeapon.Index);
+    if (!IsFakeClient(client) && (!wep.HasProp(Prop_Send, "m_upgradeBitVec") || wep.GetProp(Prop_Send, "m_upgradeBitVec")))
+    {
+      GetEntityNetClass(wep.Index, weapon, sizeof(weapon));
+      char props[3][128];
+      props[0] = "m_iClip1";
+      props[1] = "m_nUpgradedPrimaryAmmoLoaded";
+      props[2] = "m_iExtraPrimaryAmmo";
+      int offs2 = 0;
+      int offs1 = FindSendPropInfo(weapon, "m_upgradeBitVec", _, _, offs2);
+      int test = LoadFromAddress(GetEntityAddress(wep.Index) + view_as<Address>(6112), NumberType_Int8);
+      PrintToChatAllLog("\n\n~=%d: \n%s: %d \n%s: %d \n%s: %d \ntest: %d - offs1: %d, offs2: %d~=", \
+                        wep, \
+                        props[0], wep.GetProp(Prop_Send, props[0]), props[1], wep.GetProp(Prop_Send, props[1]), \
+                        props[2], wep.GetProp(Prop_Send, props[2]), test, offs1, offs2);
+    }
+#endif
 
   if (!strncmp(weapon, "csbase_gun", 10))
   {
