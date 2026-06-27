@@ -11,7 +11,7 @@
 #include "Helpers.sp"
 
 WepInfo_t OurInfo;
-#include "WepInfoHandler.sp"
+#include "Handlers/WepInfo.sp"
 
 public Plugin myinfo =
 {
