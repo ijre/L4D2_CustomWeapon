@@ -5,13 +5,6 @@
 #define GAME_L4D2
 #include <thelpers>
 #tryinclude <PrintToChatAllLog.sp>
-#define DEFAULT_DEBUG 1
-#tryinclude <SetupDebugMacros.sp>
-
-#include "Helpers.sp"
-
-WepInfo_t OurInfo;
-#include "Handlers/WepInfo.sp"
 
 public Plugin myinfo =
 {
@@ -21,10 +14,15 @@ public Plugin myinfo =
   version = "0.0.0.1"
 }
 
-static DynamicHook PrimFireHook;
-// static Handle Call_BaseForceFire;
-static Handle Call_Reload;
-static Handle Call_SendWepAnim;
+WepInfo_t OurInfo;
+
+DynamicHook PrimFireHook;
+// Handle Call_BaseForceFire;
+Handle Call_Reload;
+Handle Call_SendWepAnim;
+
+#include "Helpers.sp"
+#include "Handlers/WepInfo.sp"
 
 static bool LateLoad = false;
 public APLRes AskPluginLoad2(Handle h, bool late)
