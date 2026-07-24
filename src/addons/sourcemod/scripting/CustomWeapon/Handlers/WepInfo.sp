@@ -127,27 +127,6 @@ static SoundInfo_t GetSoundDefaults()
   return ret;
 }
 
-static float GetFFReduction()
-{
-  char diff[11];
-  GetConVarString(FindConVar("z_difficulty"), diff, sizeof(diff));
-  ReplaceString(diff, sizeof(diff), "Impossible", "expert");
-
-  char factorCVar[40];
-  Format(factorCVar, sizeof(factorCVar), "survivor_friendly_fire_factor_%c%s", CharToLower(diff[0]), diff[1]);
-  return GetConVarFloat(FindConVar(factorCVar));
-}
-
-static float MaxF(float val, float val2)
-{
-  return val >= val2 ? val : val2;
-}
-
-static float MinF(float val, float val2)
-{
-  return val <= val2 ? val : val2;
-}
-
 stock float CalcDamage(float dist, int hitbox, bool friendlyFire = false)
 {
   if (dist > OurInfo.Range)
@@ -159,8 +138,8 @@ stock float CalcDamage(float dist, int hitbox, bool friendlyFire = false)
 
   if (OurInfo.RangeGain && dist > OurInfo.RangeGain)
   {
-    ret = MinF(ret, ret / ((dist - OurInfo.RangeGain) * (OurInfo.RangeGain / OurInfo.Range)) );
+    ret = Min(ret, ret / ((dist - OurInfo.RangeGain) * (OurInfo.RangeGain / OurInfo.Range)) );
   }
 
-  return friendlyFire ? MaxF(1.0, ret * GetFFReduction()) : ret;
+  return friendlyFire ? Max(1.0, ret * GetFFReduction()) : ret;
 }
