@@ -1,5 +1,7 @@
 #include <sourcemod>
 
+#include "Hooks.sp"
+
 #define KEY_SOUND_NORMAL_FIRE  "single_shot"
 // #define KEY_SOUND_DUALIES_FIRE "double_shot"
 #define KEY_SOUND_INCEN_FIRE   "shoot_incendiary"
@@ -127,21 +129,4 @@ static SoundInfo_t GetSoundDefaults()
   ret.Channel = SNDCHAN_WEAPON;
   ret.Pitch   = SNDPITCH_NORMAL;
   return ret;
-}
-
-stock float CalcDamage(float dist, int hitbox, bool friendlyFire = false)
-{
-  if (dist > OurInfo.Range)
-  {
-    return 0.0;
-  }
-
-  float ret = OurInfo.Damage * Pow(OurInfo.RangeMod, (1.0 - OurInfo.RangeMod) * (dist / 500.0));
-
-  if (OurInfo.RangeGain && dist > OurInfo.RangeGain)
-  {
-    ret = Min(ret, ret / ((dist - OurInfo.RangeGain) * (OurInfo.RangeGain / OurInfo.Range)) );
-  }
-
-  return friendlyFire ? Max(1.0, ret * GetFFReduction()) : ret;
 }

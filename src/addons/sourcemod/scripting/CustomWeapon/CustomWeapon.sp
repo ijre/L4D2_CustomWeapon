@@ -65,6 +65,7 @@ public void OnPluginStart()
   RegConsoleCmd("give csbase_gun", cb);
 
   HookEvent("weapon_fire", OnFire, EventHookMode_Pre);
+  HookEvent("player_use", OnUse);
 
 #if DEBUG
   RegAdminCmd("sm_weptest", Test_Print, ADMFLAG_ROOT);
@@ -87,90 +88,4 @@ public void OnEntityCreated(int ent, const char[] class)
   {
     DHookEntity(PrimFireHook, false, ent, INVALID_FUNCTION, Primmy);
   }
-}
-
-static MRESReturn Primmy(int _thisRaw)
-{
-  CBaseCombatWeapon _this = view_as<CBaseCombatWeapon>(_thisRaw);
-
-  int currentClip = _this.GetProp(Prop_Send, "m_iClip1");
-  if (currentClip <= 0)
-  {
-    _this.SetProp(Prop_Send, "m_iClip1", 0);
-    _this.SetProp(Prop_Data, "m_bFireOnEmpty", 1);
-    SDKCall(Call_Reload, _thisRaw);
-    return MRES_Supercede;
-  }
-
-  _this.SetPropFloat(Prop_Send, "m_flTimeAttackQueued", GetGameTime());
-  _this.SetPropFloat(Prop_Send, "m_flNextPrimaryAttack", GetGameTime() + OurInfo.CycleTime);
-  SDKCall(Call_SendWepAnim, _thisRaw, 1252); // ACT_VM_PRIMARYATTACK_LAYER
-
-  bool isUsingIncenAmmo = false; //! TODO
-  EmitSoundToAll(isUsingIncenAmmo ? OurInfo.FireSounds.Incen.FileName : OurInfo.FireSounds.Normal.FileName, _this.OwnerEntity.Index);
-  _this.SetProp(Prop_Send, "m_iClip1", currentClip - 1);
-
-  for (int i = 0; i < OurInfo.Bullets; i++)
-  {
-    FireWep(VA_Plr(_this.OwnerEntity));
-  }
-
-  return MRES_Handled;
-}
-
-static void FireWep(CBasePlayer client)
-{
-  float eyePos[3];
-  float eyeAngs[3];
-
-  client.GetEyePosition(eyePos);
-  client.GetEyeAngles(eyeAngs);
-  TR_TraceRayFilter(eyePos, eyeAngs, MASK_SHOT, RayType_Infinite, noSelf, client.Index);
-  int targ = TR_GetEntityIndex();
-  float targPos[3];
-  TR_GetEndPosition(targPos);
-
-  float dmg = CalcDamage(GetVectorDistance(eyePos, targPos), TR_GetHitBoxIndex(),
-    targ > 0 && targ <= MaxClients
-    ?
-    client.Team == VA_Plr(targ).Team
-    :
-    false);
-
-  SDKHooks_TakeDamage(targ, client.Index, client.Index, dmg, DMG_BULLET, -1, NULL_VECTOR, eyePos, false);
-}
-
-static Action OnFire(Event event, const char[] name, bool dontBroadcast)
-{
-  char weapon[128];
-  event.GetString("weapon", weapon, sizeof(weapon));
-
-#if DEBUG
-    int client = GetClientOfUserId(event.GetInt("userid"));
-    CBaseCombatWeapon wep = view_as<CBaseCombatWeapon>(VA_Plr(client).ActiveWeapon.Index);
-    if (!IsFakeClient(client) && (!wep.HasProp(Prop_Send, "m_upgradeBitVec") || wep.GetProp(Prop_Send, "m_upgradeBitVec")))
-    {
-      GetEntityNetClass(wep.Index, weapon, sizeof(weapon));
-      char props[3][128];
-      props[0] = "m_iClip1";
-      props[1] = "m_nUpgradedPrimaryAmmoLoaded";
-      props[2] = "m_iExtraPrimaryAmmo";
-      int offs2 = 0;
-      int offs1 = FindSendPropInfo(weapon, "m_upgradeBitVec", _, _, offs2);
-      int test = LoadFromAddress(GetEntityAddress(wep.Index) + view_as<Address>(6112), NumberType_Int8);
-      PrintToChatAllLog("\n\n~=%d: \n%s: %d \n%s: %d \n%s: %d \ntest: %d - offs1: %d, offs2: %d~=", \
-                        wep, \
-                        props[0], wep.GetProp(Prop_Send, props[0]), props[1], wep.GetProp(Prop_Send, props[1]), \
-                        props[2], wep.GetProp(Prop_Send, props[2]), test, offs1, offs2);
-    }
-#endif
-
-  if (!strncmp(weapon, "csbase_gun", 10))
-  {
-    event.SetInt("weaponid", 22);
-    event.SetInt("count", 1);
-    return Plugin_Changed;
-  }
-
-  return Plugin_Continue;
 }
