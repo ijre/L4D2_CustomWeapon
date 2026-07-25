@@ -62,7 +62,10 @@ public void OnPluginStart()
 
   OurInfo = LoadWeaponFile();
 
-  RegConsoleCmd("give csbase_gun", cb);
+  if (!IsDedicatedServer())
+  {
+    RegConsoleCmd("give csbase_gun", cb);
+  }
 
   HookEvent("weapon_fire", OnFire, EventHookMode_Pre);
   HookEvent("player_use", OnUse);
