@@ -103,7 +103,7 @@ Action OnFire(Event event, const char[] name, bool dontBroadcast)
     char props[3][128];
     props[0] = "m_iClip1";
     props[1] = "m_nUpgradedPrimaryAmmoLoaded";
-    props[2] = "m_iExtraPrimaryAmmo";
+    props[2] = "m_Gender";
     int safeBitVec = LoadFromAddress(GetEntityAddress(wep.Index) + view_as<Address>(6112), NumberType_Int8);
     PrintToChatAllLog("\n\n~=%d: \n%s: %d \n%s: %d \n%s: %d \nupgradeBitVec: %d~=", \
                       wep.Index, \
