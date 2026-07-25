@@ -34,9 +34,9 @@ enum struct WepInfo_t
   FireSounds_t FireSounds;
 }
 
-stock WepInfo_t LoadWeaponFile(const char[] fileName = "scripts\\weapon_csbase_gun.txt")
+WepInfo_t LoadWeaponFile()
 {
-  File file = OpenFile(fileName, "r", true);
+  File file = OpenFile("scripts\\weapon_csbase_gun.txt", "r", true);
   char fileData[10000];
   file.ReadString(fileData, sizeof(fileData));
   delete file;
