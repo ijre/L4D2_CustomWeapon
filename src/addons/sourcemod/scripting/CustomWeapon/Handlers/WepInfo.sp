@@ -23,6 +23,7 @@ enum struct FireSounds_t
 enum struct WepInfo_t
 {
   int    Damage;
+  int    ClipSize;
   int    Bullets;
   float  Range;
   float  RangeGain;
@@ -44,6 +45,7 @@ stock WepInfo_t LoadWeaponFile(const char[] fileName = "scripts\\weapon_csbase_g
   // defaults are pulled from reversed CTerrorWeaponInfo::Parse
   WepInfo_t ret;
   ret.Damage    = wepFileKV.GetNum("Damage", 1); // the real default for this is 42, but i figure if this has gone wrong it should be obvious
+  ret.ClipSize  = wepFileKV.GetNum("clip_size", -1);
   ret.Bullets   = wepFileKV.GetNum("Bullets", 1);
   ret.Range     = wepFileKV.GetFloat("Range", 8192.0);
   ret.RangeGain = wepFileKV.GetFloat("GainRange");
