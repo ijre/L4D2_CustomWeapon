@@ -75,16 +75,16 @@ public void OnPluginStart()
   if (LateLoad)
   {
     int ent = -1;
-    while ((ent = FindEntityByClassname(ent, "weapon_csbase_gun")) != -1)
+    while ((ent = FindEntityByClassname(ent, WEP_CLASSNAME)) != -1)
     {
-      OnEntityCreated(ent, "weapon_csbase_gun");
+      OnEntityCreated(ent, WEP_CLASSNAME);
     }
   }
 }
 
 public void OnEntityCreated(int ent, const char[] class)
 {
-  if (!strncmp(class, "weapon_csbase_gun", 17))
+  if (!strncmp(class, WEP_CLASSNAME, 17))
   {
     DHookEntity(PrimFireHook, false, ent, INVALID_FUNCTION, Primmy);
   }
